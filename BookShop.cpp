@@ -91,15 +91,10 @@ public:
         // CHECK IF ASKED AMOUNT IS AVAILABLE THEN PRINT PRICE AND DEDUCT
         // ELSE NOTIFY NOT AVAILABLE
         // IF NOT AVAILABLE SUGGEST TO BUY LEFTOVERS (CALL RECURSIVE METHOD)
-        //  cout << "\nEnter a book's title you want to buy: "; <----ADD TO MENU
-        //  cin >> book_to_buy->title;
-        //  cout << "\nEnter amount: ";
-        //  cin >> amount;
-
         char choice;
         if (amount >= book_to_buy->stock)
         {
-            cout << "\nYou can buy" << amount << " books at a price of: " << amount * book_to_buy->price << "\nWould you like to buy it? (Y/N): ";
+            cout << "\nYou can buy " << amount << " books at a price of: " << amount * book_to_buy->price << "\nWould you like to buy it? (Y/N): ";
             cin >> choice;
             if (choice == 'Y')
             {
@@ -123,14 +118,49 @@ class Menu
 public:
     Shop shop;
     Menu(Shop shop) { this->shop = shop; }
-    void ShowSearchBook(){};
-    void ShowBuyBook(){};
-    void ShowEditDetails(){};
+    void ShowSearchBook()
+    {
+        Book searched_book;
+        cout << "\nEnter a book's author: ";
+        getline(cin, searched_book.author);
+        cin.ignore();
+        cout << "\nEnter a book's title: ";
+        getline(cin, searched_book.title);
+        cin.ignore();
+        shop.search(searched_book.author, searched_book.title); //
+    }
+    /***METHOD OF A CLASS SHOP TO __BUY__ A BOOK***/
+    void ShowBuyBook() 
+    {
+        Book book_to_buy;
+        int amount;
+        cout << "\nEnter a book's author you want to buy: "; 
+        getline(cin, book_to_buy.author);
+        cin.ignore();
+        cout << "\nEnter a book's title you want to buy: "; 
+        getline(cin, book_to_buy.title);
+        cin.ignore();
+        cout << "\nEnter amount: ";
+        cin >> amount;
+        cin.ignore();
 
+        shop.buy(&book_to_buy,amount);
+
+    }
+    /***METHOD OF A CLASS SHOP TO __EDIT__ A BOOK***/
+    void ShowEditDetails() {}
+
+    /***METHOD OF A CLASS SHOP TO __SHOW_A_MENU__***/
     void ShowMainMenu()
     {
-        // ADD MENU OPTIONS AS TEXT
         int choice;
+        cout << "\n**********MENU**********";
+        cout << "\n1. Entry Of a New Book";
+        cout << "\n2. Buy a Book";
+        cout << "\n3. Search For a Book ";
+        cout << "\n4. Edit Details Of a Book";
+        cout << "\n5. Exit";
+        cout << "\n";
         cin >> choice;
         switch (choice)
         {
@@ -145,10 +175,11 @@ public:
             break;
         case 4:
             ShowEditDetails();
-            break;        
+            break;
         }
     }
 
+    /***METHOD OF A CLASS SHOP TO __ADD__ A BOOK***/
     void ShowAddNewBookMenu()
     {
         Book newbook;
@@ -183,6 +214,6 @@ int main()
     Shop shop;
     Menu menu(shop);
     menu.ShowMainMenu();
-    //Test new commit
+    // Test new commit
     return 0;
 }
