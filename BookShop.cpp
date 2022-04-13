@@ -35,51 +35,13 @@ public:
 
         books[lastEntry] = newbook;
         lastEntry++;
-        // for (int i = 0; i < SIZE; i++)
-        // {
-        //     Book book = books[i];
-        //     if (&books[i] == NULL)
-        //     {
-        //         books[i] = newbook;
-        //         cout << "\nBook was succesfully added.";
-        //         return;
-        //     }
-        //     else
-        //     {
-        //         cout << "\nWe're sorry, there are no more empty spaces in our store.";
-        //     }
-        // 1}
+        
     }
 
     void edit(Book *book_to_edit)
     {
-        // COUT AND CIN TO CHANGE POINTERS TO THE BOOK PARAMETERS
-        // cout << "\nEnter a book's new title: "; //ADD THIS TI THE MENU CLASS
-        // cin >> book_to_edit->title;
-        // cout << "\nEnter a book's new author: ";
-        // cin >> book_to_edit->author;
-        // cout << "\nBook's author and title was succesfully changed";
-        // for (int i = 0; i < SIZE; i++)
-        // {
-        //     if (books[i]->author == author && books[i]->title == title){
-        //         cout << "\nEnter a new author name: ";
-        //         getline(cin, author);
-        //         cout << "\nEnter a new title: ";
-        //         getline(cin, title);
-
-        //         books[i]->author = author;
-        //         books[i]->title = title;
-
-        //         cout << "\nAuthor and title have been changed successfully!";
-
-        //     }
-        //     else
-        //     {
-        //         cout << "\nWe're sorry, there is no such book...";
-
-        //     }
-        // }
         string author, title;
+        cin.ignore();
         cout << "\nEnter a new author name: ";
         getline(cin, author);
         cout << "\nEnter a new title: ";
@@ -93,13 +55,6 @@ public:
 
     Book *search(const string author, const string title)
     {
-        // TODO FIND SEARCHED_BOOK BY TITLE AND AUTHOR
-
-        /*cout << "\nEnter a book's author: ";
-        cin >> searched_book.author;
-        cout << "\nEnter a book's title: ";
-        cin >> searched_book.title;*/
-        // ADD ABOVE TO THE MENU
         for (int i = 0; i < SIZE; i++)
         {
             if (books[i].author.compare(author) == 0 && books[i].title.compare(title) == 0)
@@ -113,24 +68,21 @@ public:
 
     void buy(Book *book_to_buy, int amount)
     {
-        // CHECK IF ASKED AMOUNT IS AVAILABLE THEN PRINT PRICE AND DEDUCT
-        // ELSE NOTIFY NOT AVAILABLE
-        // IF NOT AVAILABLE SUGGEST TO BUY LEFTOVERS (CALL RECURSIVE METHOD)
         char choice;
         if (amount <= book_to_buy->stock)
         {
             cout << "\nYou can buy " << amount << " books at a price of: " << amount * book_to_buy->price << "\nWould you like to buy it? (Y/N): ";
             cin >> choice;
-            if (choice == 'Y')
+            if (choice == 'Y'||'y')
             {
-                book_to_buy->stock--;
+                book_to_buy->stock = book_to_buy->stock - amount;
             }
         }
         else
         {
             cout << "\nWe have only " << book_to_buy->stock << ".\nWould you like to buy it at a price of: " << book_to_buy->stock * book_to_buy->price << "? (Y/N): ";
             cin >> choice;
-            if (choice == 'Y')
+            if (choice == 'Y'||'y')
             {
                 book_to_buy->stock = 0;
             }
@@ -149,18 +101,17 @@ public:
         cin.ignore(); // TO IGNORE ENTER FROM THE CHOICE INPUT
         cout << "\nEnter a book's author: ";
         getline(cin, searched_book.author);
-
         cout << "\nEnter a book's title: ";
         getline(cin, searched_book.title);
 
         Book *found_book = shop.search(searched_book.author, searched_book.title); 
 
         if (found_book == NULL){
-            cout << "\nBook is not found";
+            cout << "\nBook is not found" << endl;
         }
         else
         {
-            cout << "\nBook is found";
+            cout << "\nBook is found" << endl;
         }
         
 
@@ -168,30 +119,45 @@ public:
     /***METHOD OF A CLASS SHOP TO __BUY__ A BOOK***/
     void ShowBuyBook()
     {
-        Book book_to_buy;
+        string author, title;
         int amount;
-         cin.ignore();
-
+        
+        cin.ignore();
         cout << "\nEnter a book's author you want to buy: ";
-        getline(cin, book_to_buy.author);
-       
+        getline(cin, author);
         cout << "\nEnter a book's title you want to buy: ";
-        getline(cin, book_to_buy.title);
-       
+        getline(cin, title);
         cout << "\nEnter amount: ";
         cin >> amount;
 
-        shop.buy(&book_to_buy, amount);
+        Book *book_to_buy = shop.search(author,title);
+
+        if (book_to_buy != NULL)
+        {
+            if (book_to_buy->stock != 0)
+            {
+                shop.buy(book_to_buy, amount);
+            }
+            else 
+            {
+                cout << "\nSorry, we're out of stock" << endl;
+            }
+        }
+        else
+        {
+            cout << "\nSorry, we don't have this book" << endl;
+        }
+        
     }
     /***METHOD OF A CLASS SHOP TO __EDIT__ A BOOK***/
     void ShowEditDetails()
     {
-        string title, author;
+        string author, title;
         cin.ignore();
-        cout << "\nEnter the title of the book you want to edit: ";
-        cin >> title;
         cout << "\nEnter the author of the book you want to edit: ";
         cin >> author;
+        cout << "\nEnter the title of the book you want to edit: ";
+        cin >> title;
 
         Book *book_to_edit = shop.search(author, title);
 
@@ -201,7 +167,7 @@ public:
         }
         else
         {
-            cout << "\nWe're sorry, there is no such book...";
+            cout << "\nWe're sorry, there is no such book..." << endl;
         }
     }
 
@@ -216,6 +182,7 @@ public:
         cout << "\n4. Edit Details Of a Book";
         cout << "\n5. Exit";
         cout << "\n";
+        cout << "\nPlease select from the menu list by entering number of operation: ";
         cin >> choice;
         switch (choice)
         {
@@ -226,7 +193,6 @@ public:
         case 2:
             ShowBuyBook();
             ShowMainMenu();
-
             break;
         case 3:
             ShowSearchBook();
@@ -269,6 +235,5 @@ int main()
     Shop shop;
     Menu menu(shop);
     menu.ShowMainMenu();
-    // Test new commit
     return 0;
 }
