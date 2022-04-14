@@ -1,7 +1,5 @@
 #include <iostream>
 #include <string.h>
-#include <ios>
-#include <limits>
 
 using namespace std;
 const int SIZE = 50;
