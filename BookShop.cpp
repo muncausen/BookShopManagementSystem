@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string.h>
+#include <ios>
+#include <limits>
 
 using namespace std;
 const int SIZE = 50;
@@ -40,17 +42,29 @@ public:
 
     void edit(Book *book_to_edit)
     {
-        string author, title;
+        string author, title, publisher;
+        int stock;
+        float price;
         cin.ignore();
         cout << "\nEnter a new author name: ";
         getline(cin, author);
         cout << "\nEnter a new title: ";
         getline(cin, title);
+        cout << "\nEnter a new publisher: ";
+        getline(cin, publisher);
+        cout << "\nEnter a new price: ";
+        cin >> price;
+        cout << "\nEnter a new amount: ";
+        cin >> stock;
 
         book_to_edit->author = author;
         book_to_edit->title = title;
+        book_to_edit->publisher = publisher;
+        book_to_edit->price = price;
+        book_to_edit->stock = stock;
 
-        cout << "\nAuthor and title have been changed successfully!";
+
+        cout << "\nBook details have been changed successfully!";
     }
 
     Book *search(const string author, const string title)
@@ -59,6 +73,7 @@ public:
         {
             if (books[i].author.compare(author) == 0 && books[i].title.compare(title) == 0)
                 {
+                    cout << "Book found succesfully!" << endl;
                     return &books[i];
                 }
             
@@ -71,20 +86,30 @@ public:
         char choice;
         if (amount <= book_to_buy->stock)
         {
-            cout << "\nYou can buy " << amount << " books at a price of: " << amount * book_to_buy->price << "\nWould you like to buy it? (Y/N): ";
+            cout << "\nYou can buy " << amount << " books at a price of: $" << amount * book_to_buy->price << "\nWould you like to buy it? (Y/N): ";
             cin >> choice;
-            if (choice == 'Y'||'y')
+            if (choice == 'Y'|| choice == 'y')
             {
                 book_to_buy->stock = book_to_buy->stock - amount;
+                cout << "\nBooks Bought Succesfully!";
+            }
+            else
+            {
+                cout << "\nYou Didn't Buy Any Books!";
             }
         }
         else
         {
-            cout << "\nWe have only " << book_to_buy->stock << ".\nWould you like to buy it at a price of: " << book_to_buy->stock * book_to_buy->price << "? (Y/N): ";
+            cout << "\nWe have only " << book_to_buy->stock << ".\nWould you like to buy it at a price of: $" << book_to_buy->stock * book_to_buy->price << "? (Y/N): ";
             cin >> choice;
-            if (choice == 'Y'||'y')
+            if (choice == 'Y'|| choice == 'y')
             {
                 book_to_buy->stock = 0;
+                cout << "\nBooks Bought Succesfully!";
+            }
+            else
+            {
+                cout << "\nYou Didn't Buy Any Books!";
             }
         }
     }
@@ -111,7 +136,12 @@ public:
         }
         else
         {
-            cout << "\nBook is found" << endl;
+            cout << "\nBook found succesfully" << endl;
+            cout << "Title Name: " << found_book->title << endl;
+            cout << "Author Name: " << found_book->author << endl;
+            cout << "Publisher Name: " << found_book->publisher << endl;
+            cout << "Number of Copies: " << found_book->stock << endl;
+            cout << "Price: $" << found_book->price << endl;
         }
         
 
@@ -155,9 +185,9 @@ public:
         string author, title;
         cin.ignore();
         cout << "\nEnter the author of the book you want to edit: ";
-        cin >> author;
+        getline(cin, author);
         cout << "\nEnter the title of the book you want to edit: ";
-        cin >> title;
+        getline(cin, title);
 
         Book *book_to_edit = shop.search(author, title);
 
