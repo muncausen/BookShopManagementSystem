@@ -1,5 +1,8 @@
 #include <iostream>
 #include <string.h>
+#include <sstream>
+#include <limits>
+#include <vector>
 
 using namespace std;
 const int SIZE = 50;
@@ -155,8 +158,17 @@ public:
         getline(cin, author);
         cout << "\nEnter a book's title you want to buy: ";
         getline(cin, title);
-        cout << "\nEnter amount: ";
-        cin >> amount;
+        while (true){
+            cout << "\nEnter amount: ";
+            if (cin >> amount){
+                break;
+            }else{
+                cout << "Enter a valid numeric value!\n";
+                cin.clear();
+                cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+        
 
         Book *book_to_buy = shop.search(author,title);
 
@@ -186,6 +198,7 @@ public:
         getline(cin, author);
         cout << "\nEnter the title of the book you want to edit: ";
         getline(cin, title);
+        
 
         Book *book_to_edit = shop.search(author, title);
 
@@ -248,12 +261,27 @@ public:
         cout << "\nEnter Publisher Name: ";
         getline(cin, newbook.publisher);
 
-        cout << "\nEnter Price: ";
-        cin >> newbook.price;
-
-        cout << "\nEnter Number Of Copies: ";
-        cin >> newbook.stock;
-
+        while (true){
+            cout << "\nEnter Price: ";
+            if (cin >> newbook.price){
+                break;
+            }else{
+                cout << "Enter a valid numeric value!\n";
+                cin.clear();
+                cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+        while (true){
+            cout << "\nEnter Number Of Copies: ";
+            if (cin >> newbook.stock){
+                break;
+            }else{
+                cout << "Enter a valid numeric value!\n";
+                cin.clear();
+                cin.ignore(numeric_limits<std::streamsize>::max(), '\n');
+            }
+        }
+        
         shop.entry(newbook);
     }
 };
